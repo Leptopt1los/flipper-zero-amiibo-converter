@@ -15,7 +15,7 @@ def convert_bin_to_nfc(bin_data:bytes) -> str:
                 "SAK: 00\n"+
                 "# Mifare Ultralight specific data\n"+
                 "Data format version: 1\n"+
-                "Signature: DF EA 07 1E DA C0 CC 4E 9E 0F D8 64 6D 57 F1 4E 63 3D D7 DA 03 C5 96 06 72 BC D8 BE 80 02 6B 7E\n"+
+                "Signature: DE FA CE BA BE DE AD FA CE FE ED BE EF CA DE AB ED AB CD EF BE EF BE EF BE EF BE EF BE EF BE EF\n"+
                 "Mifare version: 00 04 04 02 01 00 11 03\n"+
                 "Counter 0: 0\n"+
                 "Tearing 0: 00\n"+
@@ -33,7 +33,6 @@ def convert_bin_to_nfc(bin_data:bytes) -> str:
         output_data += f"Page {i}: {page_data[0:2]} {page_data[2:4]} {page_data[4:6]} {page_data[6:8]}\n"
 
     output_data += "Failed authentication attempts: 0\n"
-    print (output_data)
     return output_data
 
 def process_file(input_file_path:str, output_directory:str) -> None:
