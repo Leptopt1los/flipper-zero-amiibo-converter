@@ -15,6 +15,8 @@ input - directory path (processed recursively) or .bin file
 
 output - the name of the output directory. optional parameter, default is amiibo nfc. will be created in the script call directory
 
+also you can use flag ```--norename``` to specify that files and subdirectories of the output folder do not need to be renamed to a format compatible with the flipper zero file system (NOT RECOMMENDED)
+
 f.e:
 ```bash
 ./fz_amiibo_converter.py Amiibo_Bins

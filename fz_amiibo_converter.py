@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import re
 
 def convert_bin_to_nfc(bin_data:bytes) -> str:
     output_data ="".join({
@@ -74,10 +75,30 @@ def process_directory(directory_path:str, output_path_name:str) -> None:
                 input_file_path = os.path.join(dirpath, filename)
                 process_file(input_file_path, output_directory)
 
+def rename_files_and_directories(directory):
+    for root, dirs, _ in os.walk(directory):        
+        for dir_name in dirs:
+            old_path = os.path.join(root, dir_name)
+            new_name = re.sub(r'[^a-zA-Z0-9()\[\] .!\-]', '_', dir_name)
+            if new_name != dir_name:
+                new_path = os.path.join(root, new_name)
+                os.rename(old_path, new_path)
+                print(f"Renamed directory: {old_path} -> {new_path}")
+
+    for root, _, files in os.walk(directory):
+        for file_name in files:
+            old_path = os.path.join(root, file_name)
+            new_name = re.sub(r'[^a-zA-Z0-9()\[\] .!\-]', '_', file_name)
+            if new_name!=file_name:
+                new_path = os.path.join(root, new_name)
+                os.rename(old_path, new_path)
+                print(f"Renamed file: {old_path} -> {new_path}")
+                
 def main():
     parser = argparse.ArgumentParser(description="amibo .bin's to flipper zero .nfc converter")
     parser.add_argument('input', help=".bin's directory or .bin file")
     parser.add_argument('-o', '--output_dir_name', help="output directory name", default="amiibo_nfc")
+    parser.add_argument('--norename', action='store_true', help="Do not rename files and directories to flipper zero compatible format")
 
     global args
     args = parser.parse_args()
@@ -85,6 +106,9 @@ def main():
         process_file(args.input, args.output_dir_name)
     else:
         process_directory(args.input, args.output_dir_name)
+
+    if not args.norename:
+        rename_files_and_directories(args.output_dir_name)
 
 if __name__ == '__main__':
     main()
